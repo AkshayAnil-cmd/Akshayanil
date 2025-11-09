@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshay- Full Gallery</title>
+    
+    <!-- Tailwind CSS CDN --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Raleway (Sans-Serif) --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Raleway:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration Script --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['Raleway', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-gold': {
+                            100: '#fcfaf0',
+                            200: '#f7f0d9',
+                            300: '#e9dcb4',
+                            400: '#d9c289',
+                            500: '#c9a85e', // Main gold accent
+                            600: '#b08f4c',
+                            700: '#91733e',
+                            800: '#755c34',
+                            900: '#614b2f',
+                        },
+                        'brand-dark': '#1a1a1a', // Rich, near-black
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Internal Styles for Animations and Layout --><style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Base element styles */
+        body {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Heading font */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Scroll-triggered Fade-in Animation --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Apply staggered delays for grid items */
+        .gallery-item:nth-child(3n+1) { transition-delay: 50ms; }
+        .gallery-item:nth-child(3n+2) { transition-delay: 100ms; }
+        .gallery-item:nth-child(3n+3) { transition-delay: 150ms; }
+
+
+        /* --- NEW: Shimmer Effect on Grid Hover --- */
+        .shimmer-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(100deg, 
+                rgba(255, 255, 255, 0) 20%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                rgba(255, 255, 255, 0) 80%
+            );
+            transform: translateX(-100%);
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1; /* Sit above image but below text */
+        }
+        
+        .group:hover .shimmer-overlay {
+            transform: translateX(100%);
+        }
+
+        /* --- Mobile Nav Overlay --- */
+        .nav-overlay {
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .nav-overlay.open {
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .nav-overlay.open .nav-link-mobile {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered animation delays for mobile links */
+        .nav-overlay.open .nav-link-mobile:nth-child(1) { transition-delay: 0.3s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(2) { transition-delay: 0.4s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(3) { transition-delay: 0.5s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(4) { transition-delay: 0.6s; }
+
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 font-sans">
+
+    <!-- 
+      HEADER & NAVIGATION 
+    -->
+    <header class="sticky top-0 z-50 w-full bg-brand-dark/70 backdrop-blur-lg border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-bold text-white tracking-wider">
+                AKSHAY ANIL
+            </a>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-10 items-center">
+                <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300 group">
+                    Home
+                    <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-brand-gold-500"></span>
+                </a>
+                <!-- Highlighted link for the current page -->
+                <a href="gallery.html" class="text-white font-medium tracking-wide border-b-2 border-brand-gold-500 pb-1">My Works</a>
+                
+                <a href="pages.html" class="text-gray-300 hover:text-white transition-colors duration-300 group">
+                    Pages
+                    <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-brand-gold-500"></span>
+                </a>
+                <a href="contact.html" class="text-gray-900 bg-brand-gold-400 hover:bg-brand-gold-300 px-6 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+                    Contact Me
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="z-50 relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="menu-overlay" class="nav-overlay fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-xl flex flex-col justify-center items-center md:hidden">
+        <a href="index.html" class="nav-link-mobile font-serif text-5xl text-gray-300 hover:text-white mb-8">Home</a>
+        <a href="gallery.html" class="nav-link-mobile font-serif text-5xl text-white mb-8 border-b border-brand-gold-500">My Works</a>
+        <a href="pages.html" class="nav-link-mobile font-serif text-5xl text-gray-300 hover:text-white mb-8">Pages</a>
+        <a href="contact.html" class="nav-link-mobile text-gray-900 bg-brand-gold-400 px-10 py-3 rounded-full font-semibold text-xl mt-4">
+            Contact Me
+        </a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        
+        <!-- GALLERY HERO TITLE -->
+        <section class="py-24 md:py-32 text-center px-6">
+            <div class="fade-in-section max-w-4xl mx-auto">
+                <p class="text-brand-gold-400 text-sm tracking-widest uppercase mb-4">My Extensive Collection</p>
+                <h1 class="font-serif text-5xl md:text-7xl font-bold text-white leading-tight">
+                    Timeless Portfolio
+                </h1>
+                <p class="text-xl text-gray-300 mt-6 max-w-xl mx-auto font-light">
+                    From intimate moments to grand landscapes, every image tells a chapter of an exceptional story.
+                </p>
+            </div>
+        </section>
+
+        <!-- FULL GALLERY GRID -->
+        <section class="pb-24 md:pb-32 bg-brand-dark">
+            <div class="container mx-auto px-6">
+                
+                <!-- Mixed-Ratio Image Grid (Two columns on mobile, three on desktop) -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                    
+                    <!-- Item 1 (Portrait) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2">
+                        <img src="uaegirls1/IMG_6618.JPG" 
+                             alt="Luxury Portrait" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x900/4e5a6b/e2e8f0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Universal Language</h3>
+                        </div>
+                    </a>
+                    
+                    <!-- Item 2 (Landscape - WIDE 1 of 2) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item md:col-span-2">
+                        <img src="assets/aksoo34583.jpg" 
+                             alt="Grand Event" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/1200x800/8d8a9e/1a1a1a?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Temple Tide</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 3 (Square/Mid) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="uae/IMG_9081.JPG" 
+                             alt="Detail Shot" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/7a5b4f/f5f5f5?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Roadside Swagger</h3>
+                        </div>
+                    </a>
+                    
+                    <!-- Item 4 (Square/Mid) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="nature/IMG_6707.JPG" 
+                             alt="stylish" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/5e5c6a/f5f5f5?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Elevated Style</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 5 (Portrait) - This was Item 6 before deletion -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="nature/IMG_5360.JPG" 
+                             alt="Fashion Shoot" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x900/6f5972/e9dcb4?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Green Frame</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 6 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="std1/wed2.JPG" 
+                             alt="Couple Shot" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/3e4a5e/fcfaf0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Intimacy</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 7 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="uaegirls1/IMG_6621.JPG" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/8a795f/1a1a1a?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Haute</h3>
+                        </div>
+                    </a>
+                    
+                    <!-- Item 8 (Wide Landscape - WIDE 2 of 2) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item col-span-2">
+                        <img src="assets/ACH03985 copy 2.jpg" 
+                             alt="Zenith View" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/1200x800/2a2a2a/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Grounded in Nature</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 9 (Portrait - Tall) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2">
+                        <img src="red/IMG_5105.JPG" 
+                             alt="The Muse" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x900/5e4d5f/f0f0f0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Red Velvet</h3>
+                        </div>
+                    </a>
+                    
+                    <!-- Item 10 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="the/TH2.jpg" 
+                             alt="Jewelry" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/4f5e5d/f0f0f0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Spirit Incarnate</h3>
+                        </div>
+                    </a>
+                    <!-- Item 12 (Portrait - Tall) -->
+                    <!-- Item 13 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="uae/IMG_9079.JPG" 
+                             alt="Black and White" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/5a5a5a/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Grit and Graviti</h3>
+                        </div>
+                    </a>
+
+                    <!-- Item 15 (Portrait - Tall) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2">
+                        <img src="assets/aks01526 copy 2.jpg" 
+                             alt="Editorial 2" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x900/6f4f5f/fcfaf0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Royal  Presence</h3>
+                        
+                        </div>
+                    </a>
+                    
+                    <!-- Item 16 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="std/wed5.JPG" 
+                             alt="Still Life" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/4f6f4f/fcfaf0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Soon</h3>
+                            
+                        </div>
+                    </a>
+                    
+                    <!-- Item 17 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="the/THE.jpg" 
+                             alt="Street Art" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/5f4f6f/fcfaf0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Fire and Light</h3>
+                          
+                        </div>
+                    </a>
+                    
+                    
+                    
+                    <!-- Item 19 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="uae/IMG_5978.JPG" 
+                             alt="Food" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/4f5f6f/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Smile Captured</h3>
+                            
+                        </div>
+                    </a>
+                    
+                    <!-- Item 20 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="the/THE1.jpg" 
+                             alt="Abstract 2" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/6f5f4f/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">The Dance of the God</h3>
+                            
+                        </div>
+                    </a>
+                    
+                    
+                    
+                    
+                    <!-- Item 23 (Square) -->
+                    <a  class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="red/IMG_8189.JPG" 
+                             alt="Wildlife" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/6f6f6f/f0f0f0?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">New Horizons</h3>
+                           
+                        </div>
+                    </a>
+                  
+                    <!-- Item 25 (Square) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="std1/wed1.JPG" 
+                             alt="Ring Shot" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/4d4d4d/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Simply Sweet</h3>
+                            
+                        </div>
+                    </a>
+                    
+                    <!-- Item 26 (Square) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item">
+                        <img src="red/IMG_4745.JPG" 
+                             alt="Reflection" 
+                             class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                             onerror="this.src='https://placehold.co/600x600/6e6e6e/d9c289?text=Image+Error'">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20">
+                            <h3 class="font-serif text-2xl font-bold text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Mirror</h3>
+                            
+                        </div>
+                    </a>
+                    
+                        </div>
+                    </a>
+                    
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-20 bg-brand-dark border-t border-gray-700/50">
+        <div class="container mx-auto px-6 text-center">
+            <a href="index.html" class="font-serif text-4xl font-bold text-white tracking-wider mb-6 inline-block">
+                Akshay Anil
+            </a>
+            <div class="flex justify-center space-x-8 mb-8">
+                <a href="mailto:akshaygopu@gmail.com" class="text-gray-400 hover:text-white transition-colors duration-300">Gmail</a>
+                <a href="https://www.instagram.com/storiesby__akshay?igsh=YmVheWNpbWZwc2h2" class="text-gray-400 hover:text-white transition-colors duration-300">Instagram</a>
+                <a href="https://www.behance.net/akshayanilkumar7" class="text-gray-400 hover:text-white transition-colors duration-300">Behance</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript for Animations and Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            
+            // --- Mobile Menu Toggle ---
+            const menuBtn = document.getElementById('menu-btn');
+            const menuOverlay = document.getElementById('menu-overlay');
+            let isMenuOpen = false;
+            
+            menuBtn.addEventListener('click', () => {
+                isMenuOpen = !isMenuOpen;
+                menuOverlay.classList.toggle('open');
+                
+                // Toggle ARIA attributes for accessibility
+                menuBtn.setAttribute('aria-expanded', isMenuOpen);
+
+                // Toggle icon (optional: swap to an 'X')
+                if (isMenuOpen) {
+                    menuBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>`;
+                } else {
+                    menuBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>`;
+                }
+            });
+
+            // --- Scroll-triggered Animations ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            
+            const observerOptions = {
+                root: null, // relative to the viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of the element must be visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Animate only once
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // --- Set Current Year in Footer ---
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>
