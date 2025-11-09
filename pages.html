@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Relation</title>
+    
+    <!-- Tailwind CSS CDN --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Raleway (Sans-Serif) --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Raleway:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration Script --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['Raleway', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-gold': {
+                            100: '#fcfaf0',
+                            200: '#f7f0d9',
+                            300: '#e9dcb4',
+                            400: '#d9c289',
+                            500: '#c9a85e', // Main gold accent
+                            600: '#b08f4c',
+                            700: '#91733e',
+                            800: '#755c34',
+                            900: '#614b2f',
+                        },
+                        'brand-dark': '#1a1a1a', // Rich, near-black
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Internal Styles for Animations and Layout --><style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Base element styles */
+        body {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Heading font */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Scroll-triggered Fade-in Animation --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Apply staggered delays for testimonial cards */
+        .testimonial-card:nth-child(3n+1) { transition-delay: 100ms; }
+        .testimonial-card:nth-child(3n+2) { transition-delay: 200ms; }
+        .testimonial-card:nth-child(3n+3) { transition-delay: 300ms; }
+
+        /* Card Hover Motion and Glow */
+        .testimonial-card {
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(113, 128, 150, 0.5); /* Default border gray */
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(201, 168, 94, 0.2); /* Golden shadow pulse */
+            border-color: #c9a85e; /* Gold border highlight */
+        }
+
+
+        /* --- Mobile Nav Overlay --- */
+        .nav-overlay {
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .nav-overlay.open {
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .nav-overlay.open .nav-link-mobile {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered animation delays for mobile links */
+        .nav-overlay.open .nav-link-mobile:nth-child(1) { transition-delay: 0.3s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(2) { transition-delay: 0.4s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(3) { transition-delay: 0.5s; }
+        .nav-overlay.open .nav-link-mobile:nth-child(4) { transition-delay: 0.6s; }
+
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 font-sans">
+
+    <!-- 
+      HEADER & NAVIGATION 
+    -->
+    <header class="sticky top-0 z-50 w-full bg-brand-dark/70 backdrop-blur-lg border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="index.html" class="font-serif text-3xl font-bold text-white tracking-wider">
+                AKSHAY ANIL
+            </a>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-10 items-center">
+                <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300 group">
+                    Home
+                    <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-brand-gold-500"></span>
+                </a>
+                <a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300 group">
+                    My Works
+                    <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-brand-gold-500"></span>
+                </a>
+                <!-- Highlighted link for the current page -->
+                <a href="pages.html" class="text-white font-medium tracking-wide border-b-2 border-brand-gold-500 pb-1">Pages</a>
+                
+                <a href="contact.html" class="text-gray-900 bg-brand-gold-400 hover:bg-brand-gold-300 px-6 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+                    Contact Me
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="z-50 relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="menu-overlay" class="nav-overlay fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-xl flex flex-col justify-center items-center md:hidden">
+        <a href="index.html" class="nav-link-mobile font-serif text-5xl text-gray-300 hover:text-white mb-8">Home</a>
+        <a href="gallery.html" class="nav-link-mobile font-serif text-5xl text-gray-300 hover:text-white mb-8">My Works</a>
+        <a href="pages.html" class="nav-link-mobile font-serif text-5xl text-white mb-8 border-b border-brand-gold-500">Pages</a>
+        <a href="contact.html" class="nav-link-mobile text-gray-900 bg-brand-gold-400 px-10 py-3 rounded-full font-semibold text-xl mt-4">
+            Contact Me
+        </a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        
+        <!-- TESTIMONIALS HERO TITLE -->
+        <section class="pt-24 pb-16 md:pt-32 md:pb-24 text-center px-6">
+            <div class="fade-in-section max-w-4xl mx-auto">
+                <p class="text-brand-gold-400 text-sm tracking-widest uppercase mb-4">The True Measure of Artistry</p>
+                <h1 class="font-serif text-5xl md:text-7xl font-bold text-white leading-tight">
+                    Trusted by My Esteemed Clients
+                </h1>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto font-light">
+                    Read the experiences of those who have entrusted me with their most precious moments and brands.
+                </p>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS GRID -->
+        <section class="pb-24 md:pb-32 bg-brand-dark pt-0">
+            <div class="container mx-auto px-6">
+                
+                <h2 class="font-serif text-4xl text-center font-bold text-white mb-12 fade-in-section">Client Voices</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                     <a href="https://abhijithsocial.github.io/abhijithPortfolio1/">
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"For my new business launch, I needed strong personal branding images. Akshay's professionalism and attention to detail were top-tier. He helped me select outfits and backdrops, and the resulting photos give my brand the polished, modern edge it needed. Worth every dirham"</p>
+                        <p class="font-semibold text-white">Abhijith AK, Social Media Manager</p>
+                    </div>
+                    </a>
+                    <!-- Review 1 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Akshay is the best choice in Dubai for professional headshots. The session was quick and efficient at his studio, and he captured a truly confident and polished look. The high-resolution images are perfect for my LinkedIn and executive profile. A five-star professional !"</p>
+                        <p class="font-semibold text-white">Pramith Nambiar</p>
+                    </div>
+                    
+                    <!-- Review 2 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Our family photography experience with Akshay was fantastic. He suggested a stunning desert shoot location near Dubai and was incredibly patient with our two young children. The final gallery is filled with genuine, candid moments that we will treasure forever."</p>
+                        <p class="font-semibold text-white">Sandra</p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Akshay has an incredible creative vision. His use of natural light produced luminous, artistic portraits that are unlike anything we've seen. He truly captures the soul of his subjects. We highly recommend him for anyone seeking unique, timeless photography in the UAE"</p>
+                        <p class="font-semibold text-white">Sourabh P Rajeev</p>
+                    </div>
+
+                    <!-- Review 4 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"I felt so beautiful and comfortable during my maternity session with Akshay. He was warm, provided great guidance on posing, and made the entire experience easy and relaxed. The artistic quality of the final photos is simply breathtaking"</p>
+                        <p class="font-semibold text-white">Sona</p>
+                    </div>
+                    
+                    <!-- Review 6 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Akshay did my daughter's senior portraits on-location in Jumeirah, and they turned out amazing! He perfectly blended her modern style with the beautiful Dubai setting. The entire process, from booking to receiving the gallery, was seamless and fast."</p>
+                        <p class="font-semibold text-white">Roshna</p>
+                    </div>
+                    
+                    <!-- NEW Review 7 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Akshay is truly one of the best in Dubai! The exceptional customer service and the quality of the portraits exceeded all expectations. He listened carefully to our vision and delivered perfectly. Five stars across the board!".</p>
+                        <p class="font-semibold text-white">Brijith</p>
+                    </div>
+
+                    <!-- NEW Review 8 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"Look no further for a top-tier portrait photographer in Dubai. Akshay's communication was excellent, and the quick turnaround on the edited photos was a pleasant surprise. His technical skill is outstanding; the images are sharp and flawlessly edited."</p>
+                        <p class="font-semibold text-white">Frima</p>
+                    </div>
+
+                    <!-- NEW Review 9 -->
+                    <div class="bg-brand-dark border border-gray-700/50 rounded-lg p-6 shadow-lg testimonial-card fade-in-section">
+                        <p class="text-brand-gold-400 text-2xl mb-4">★★★★★</p>
+                        <p class="text-gray-300 mb-4 italic">"My husband and I are not models, but Akshay was excellent at guiding poses while making us feel completely natural. He captured such authentic portraits of us laughing and connecting. We are obsessed with the results and will use him again"</p>
+                        <p class="font-semibold text-white">Mahima</p>
+                    </div>
+                 
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT / CTA SECTION -->
+        <section id="contact" class="pt-24 pb-32 bg-brand-dark text-center">
+            <div class="container mx-auto px-6 max-w-3xl fade-in-section">
+                <h2 class="font-serif text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+                    Ready to Begin?
+                </h2>
+                <p class="text-xl text-gray-300 mb-10 font-light">
+                    Every great story starts with a simple conversation. Let's discuss your vision and create imagery that lasts.
+                </p>
+                <a href="mailto:akshaygopu@gmail.com" class="inline-block text-gray-900 bg-brand-gold-400 hover:bg-brand-gold-300 px-10 py-3 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Email Me Today
+                </a>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-20 bg-brand-dark border-t border-gray-700/50">
+        <div class="container mx-auto px-6 text-center">
+            <a href="index.html" class="font-serif text-4xl font-bold text-white tracking-wider mb-6 inline-block">
+                Akshay Anil
+            </a>
+            <div class="flex justify-center space-x-8 mb-8">
+                <a href="mailto:contact@johndoe.com" class="text-gray-400 hover:text-white transition-colors duration-300">Gmail</a>
+                <a href="https://www.instagram.com/storiesby__akshay?igsh=YmVheWNpbWZwc2h2" class="text-gray-400 hover:text-white transition-colors duration-300">Instagram</a>
+                <a href="https://www.behance.net/akshayanilkumar7" class="text-gray-400 hover:text-white transition-colors duration-300">Behance</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript for Animations and Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            
+            // --- Mobile Menu Toggle ---
+            const menuBtn = document.getElementById('menu-btn');
+            const menuOverlay = document.getElementById('menu-overlay');
+            let isMenuOpen = false;
+            
+            menuBtn.addEventListener('click', () => {
+                isMenuOpen = !isMenuOpen;
+                menuOverlay.classList.toggle('open');
+                
+                menuBtn.setAttribute('aria-expanded', isMenuOpen);
+
+                // Toggle icon
+                if (isMenuOpen) {
+                    menuBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>`;
+                } else {
+                    menuBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>`;
+                }
+            });
+
+            // --- Scroll-triggered Animations ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // No unobserve here, as new content might load/appear later
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // --- Set Current Year in Footer ---
+            document.getElementById('current-year-pages').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>
