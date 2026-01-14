@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshay - Full Gallery</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Raleway:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['Raleway', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-gold': {
+                            400: '#d9c289',
+                            500: '#c9a85e',
+                            900: '#614b2f',
+                        },
+                        'brand-dark': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #1a1a1a; color: #f0f0f0; font-family: 'Raleway', sans-serif; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* Animation Classes */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+        
+        /* Grid Filter Transitions */
+        .gallery-item { transition: opacity 0.4s ease, transform 0.4s ease; }
+        .gallery-item.hidden-item { display: none; }
+
+        /* Shimmer Effect */
+        .shimmer-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(100deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 80%);
+            transform: translateX(-100%); transition: transform 1.2s ease; z-index: 1;
+        }
+        .group:hover .shimmer-overlay { transform: translateX(100%); }
+
+        /* Mobile Nav */
+        .nav-overlay { transform: translateY(-100%); transition: transform 0.5s ease-in-out; }
+        .nav-overlay.open { transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 font-sans">
+
+    <!-- NAVIGATION -->
+    <header class="sticky top-0 z-50 w-full bg-brand-dark/70 backdrop-blur-lg border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="index.html" class="font-serif text-3xl font-bold text-white tracking-wider">AKSHAY ANIL</a>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-10 items-center">
+                <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a>
+                <a href="gallery.html" class="text-white font-medium border-b-2 border-brand-gold-500 pb-1">My Works</a>
+                <a href="pages.html" class="text-gray-300 hover:text-white transition-colors duration-300">Pages</a>
+                <a href="contact.html" class="text-gray-900 bg-brand-gold-400 hover:bg-brand-gold-300 px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105">Contact Me</a>
+            </div>
+            
+            <!-- Mobile Menu Btn -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="z-50 relative text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="menu-overlay" class="nav-overlay fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-xl flex flex-col justify-center items-center md:hidden">
+        <a href="index.html" class="font-serif text-4xl text-gray-300 mb-6">Home</a>
+        <a href="gallery.html" class="font-serif text-4xl text-white mb-6 border-b border-brand-gold-500">My Works</a>
+        <a href="contact.html" class="text-brand-dark bg-brand-gold-400 px-8 py-2 rounded-full font-bold text-xl">Contact</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Hero -->
+        <section class="pt-24 pb-12 text-center px-6">
+            <div class="fade-in-section max-w-4xl mx-auto">
+                <p class="text-brand-gold-400 text-sm tracking-widest uppercase mb-4">My Extensive Collection</p>
+                <h1 class="font-serif text-5xl md:text-7xl font-bold text-white leading-tight">Timeless Portfolio</h1>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="pb-12 px-6">
+            <div class="container mx-auto flex flex-wrap justify-center gap-4 fade-in-section">
+                <button class="filter-btn px-6 py-2 rounded-full border border-brand-gold-500 bg-brand-gold-500 text-brand-dark font-semibold transition-all duration-300 active-filter" data-filter="all">All Works</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-brand-gold-500 text-brand-gold-500 hover:bg-brand-gold-500/10 transition-all duration-300" data-filter="weddings">Weddings & Stories</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-brand-gold-500 text-brand-gold-500 hover:bg-brand-gold-500/10 transition-all duration-300" data-filter="portraits">Portraits & People</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-brand-gold-500 text-brand-gold-500 hover:bg-brand-gold-500/10 transition-all duration-300" data-filter="commercial">Commercial & Corporate</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-brand-gold-500 text-brand-gold-500 hover:bg-brand-gold-500/10 transition-all duration-300" data-filter="culture">Culture & Travel</button>
+            </div>
+        </section>
+
+        <!-- GALLERY GRID -->
+        <section class="pb-32 bg-brand-dark">
+            <div class="container mx-auto px-6">
+                <!-- Using grid-flow-dense to pack items tightly -->
+                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 grid-flow-dense">
+                    
+                    <!-- 
+                        === WEDDINGS & STORIES === 
+                    -->
+                    
+                    <!-- Wedding 1 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="weddings">
+                        <img src="new4/WhatsApp Image 2026-01-13 at 9.41.37 PM.jpg" onerror="this.src='https://placehold.co/2336x3338/3e2f2f/d9c289?text=Wedding+New'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Wedding 2 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="weddings">
+                        <img src="new4/WhatsApp Image 2026-01-13 at 9.40.47 PM.jpg" onerror="this.src='https://placehold.co/834x1280/3e2f2f/d9c289?text=Wedding+Detail'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Save The Date 1 (Landscape - Wide) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item md:col-span-2" data-category="weddings">
+                        <img src="std/SIV02357 copy.jpg" onerror="this.src='https://placehold.co/6824x4549/3e2f2f/d9c289?text=Save+The+Date+Wide'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Save The Date 2 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="weddings">
+                        <img src="std/wed5.JPG" onerror="this.src='https://placehold.co/3755x5633/3e2f2f/d9c289?text=STD+Portrait'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Save The Date 3 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="weddings">
+                        <img src="std1/wed2.JPG" onerror="this.src='https://placehold.co/3549x5394/3e2f2f/d9c289?text=STD+1+Portrait'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    
+                    <!-- Save The Date 4 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="weddings">
+                        <img src="std1/wed1.JPG" onerror="this.src='https://placehold.co/3457x5198/3e2f2f/d9c289?text=STD+1+Portrait+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+
+                    <!-- 
+                        === PORTRAITS & PEOPLE === 
+                    -->
+                    
+                    <!-- Red Girl 1 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="red/IMG_4745.JPG" onerror="this.src='https://placehold.co/3657x5486/5c3a3a/f0f0f0?text=Red+Portrait+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Red Girl 2 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="red/IMG_5105.JPG" onerror="this.src='https://placehold.co/3774x5661/5c3a3a/f0f0f0?text=Red+Portrait+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Red Girl 3 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="red/IMG_8189.JPG" onerror="this.src='https://placehold.co/3840x5760/5c3a3a/f0f0f0?text=Red+Portrait+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Nature Placeholders (3x) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="nature/IMG_4289.JPG" onerror="this.src='https://placehold.co/3840x5760/4a5c4a/f0f0f0?text=Nature+PH+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="nature/IMG_5360.JPG" onerror="this.src='https://placehold.co/3840x5760/4a5c4a/f0f0f0?text=Nature+PH+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="nature/IMG_6707.JPG" onerror="this.src='https://placehold.co/3840x5760/4a5c4a/f0f0f0?text=Nature+PH+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Child Portraits (3x) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="new2/ACH07483 copy.jpg" onerror="this.src='https://placehold.co/4390x5487/4a4a5c/f0f0f0?text=Child+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="new2/insta1.jpg" onerror="this.src='https://placehold.co/4262x5329/4a4a5c/f0f0f0?text=Child+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="new2/insta2.jpg" onerror="this.src='https://placehold.co/4400x5500/4a4a5c/f0f0f0?text=Child+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- UAE Portraits -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uae/IMG_5978.JPG" onerror="this.src='https://placehold.co/3496x5370/5c524a/f0f0f0?text=UAE+Portrait+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uae/IMG_9079.JPG" onerror="this.src='https://placehold.co/3591x6380/5c524a/f0f0f0?text=UAE+Portrait+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uae/IMG_9081.JPG" onerror="this.src='https://placehold.co/3450x6131/5c524a/f0f0f0?text=UAE+Portrait+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- UAE Girls -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uaegirls/IMG_6623.JPG" onerror="this.src='https://placehold.co/3578x5234/5c524a/f0f0f0?text=UAE+Girl+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uaegirls/IMG_6626.JPG" onerror="this.src='https://placehold.co/3627x5430/5c524a/f0f0f0?text=UAE+Girl+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uaegirls1/IMG_6618.JPG" onerror="this.src='https://placehold.co/3574x5274/5c524a/f0f0f0?text=UAE+Girl+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="portraits">
+                        <img src="uaegirls1/IMG_6621.JPG" onerror="this.src='https://placehold.co/3596x5342/5c524a/f0f0f0?text=UAE+Girl+4'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                         <div class="shimmer-overlay"></div>
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+
+                    <!-- 
+                        === COMMERCIAL & CORPORATE === 
+                    -->
+                    
+                    <!-- Houses Placeholders (3x) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 1/t9.jpg" onerror="this.src='https://placehold.co/7008x4672/3d4c53/f0f0f0?text=House+PH+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 2/t 7.jpg" onerror="this.src='https://placehold.co/7008x4672/3d4c53/f0f0f0?text=House+PH+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 3/T 1.jpg" onerror="this.src='https://placehold.co/7008x4672/3d4c53/f0f0f0?text=House+PH+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Real Estate Series -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 3/t 6.jpg" onerror="this.src='https://placehold.co/6738x4476/3d4c53/f0f0f0?text=House+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 3/t 2.jpg" onerror="this.src='https://placehold.co/6986x4270/3d4c53/f0f0f0?text=House+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 3/t 3.jpg" onerror="this.src='https://placehold.co/7008x4587/3d4c53/f0f0f0?text=House+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 2/t4.jpg" onerror="this.src='https://placehold.co/6936x4146/3d4c53/f0f0f0?text=House+4'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 2/t5.jpg" onerror="this.src='https://placehold.co/7008x4404/3d4c53/f0f0f0?text=House+5'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 1/t8.jpg" onerror="this.src='https://placehold.co/7008x4517/3d4c53/f0f0f0?text=House+6'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="commercial">
+                        <img src="house 1/t6.jpg" onerror="this.src='https://placehold.co/7008x4672/3d4c53/f0f0f0?text=House+7'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+
+                    <!-- 
+                        === CULTURE & TRAVEL === 
+                    -->
+                    
+                    <!-- Green Fields (Wide) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item md:col-span-2" data-category="culture">
+                        <img src="assets/ACH03985 copy 2.jpg" onerror="this.src='https://placehold.co/6000x3375/2e3e2e/f0f0f0?text=Green+Field+Wide'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item md:col-span-2" data-category="culture">
+                        <img src="assets/ACH04008 copy 2.jpg" onerror="this.src='https://placehold.co/5965x3355/2e3e2e/f0f0f0?text=Green+Field+Wide+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Kerala Elephant 1 (Portrait) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="assets/aks01526 copy 2.jpg" onerror="this.src='https://placehold.co/1881x2879/2e3e2e/d9c289?text=Kerala+Elephant'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Kerala Elephant 2 (Landscape) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item" data-category="culture">
+                        <img src="assets/aksoo34583.jpg" onerror="this.src='https://placehold.co/1080x716/2e3e2e/d9c289?text=Kerala+Elephant+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Padayani Series (Portraits) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="new 3/padayani1.jpg" onerror="this.src='https://placehold.co/3664x4580/5c2e2e/d9c289?text=Padayani+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="new 3/padayani2.jpg" onerror="this.src='https://placehold.co/3158x3947/5c2e2e/d9c289?text=Padayani+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="new 3/padayani3.jpg" onerror="this.src='https://placehold.co/3418x4272/5c2e2e/d9c289?text=Padayani+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="new 3/padayani5.jpg" onerror="this.src='https://placehold.co/3295x4118/5c2e2e/d9c289?text=Padayani+4'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                    <!-- Theyyam Series (Portraits) -->
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="the/TH2.jpg" onerror="this.src='https://placehold.co/3327x4160/c9302c/f0f0f0?text=Theyyam+1'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="the/THE.jpg" onerror="this.src='https://placehold.co/3200x4000/c9302c/f0f0f0?text=Theyyam+2'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+                    <a class="block group relative overflow-hidden rounded-lg fade-in-section gallery-item row-span-2" data-category="culture">
+                        <img src="the/THE1.jpg" onerror="this.src='https://placehold.co/2350x2937/c9302c/f0f0f0?text=Theyyam+3'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="shimmer-overlay"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent z-10"></div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-20 bg-brand-dark border-t border-gray-700/50">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-serif text-3xl text-white mb-6">Akshay Anil</h2>
+            <div class="flex justify-center space-x-6 mb-8 text-gray-400">
+                <a href="mailto:akshaygopu@gmail.com" class="hover:text-white transition">Email</a>
+                <a href="https://www.instagram.com/storiesby__akshay?igsh=YmVheWNpbWZwc2h2" class="hover:text-white transition">Instagram</a>
+                <a href="https://www.behance.net/akshayanilkumar7" class="hover:text-white transition">Behance</a>
+            </div>
+            <p class="text-gray-500 text-sm">&copy; <span id="current-year"></span> Akshay Anil. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu
+            const menuBtn = document.getElementById('menu-btn');
+            const overlay = document.getElementById('menu-overlay');
+            let isOpen = false;
+            
+            menuBtn.addEventListener('click', () => {
+                isOpen = !isOpen;
+                overlay.classList.toggle('open');
+                menuBtn.innerHTML = isOpen 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>';
+            });
+
+            // --- GRID LOGIC ---
+            const grid = document.getElementById('gallery-grid');
+            const items = Array.from(grid.children);
+
+            // 1. Assign Initial Indices for restoring order
+            items.forEach((item, index) => {
+                item.dataset.initialIndex = index;
+            });
+
+            // 2. Shuffle Function
+            function shuffleItems() {
+                const currentItems = Array.from(grid.children);
+                for (let i = currentItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [currentItems[i], currentItems[j]] = [currentItems[j], currentItems[i]];
+                }
+                currentItems.forEach(item => grid.appendChild(item));
+            }
+
+            // 3. Reset Order Function
+            function resetItemsOrder() {
+                const currentItems = Array.from(grid.children);
+                currentItems.sort((a, b) => {
+                    return parseInt(a.dataset.initialIndex) - parseInt(b.dataset.initialIndex);
+                });
+                currentItems.forEach(item => grid.appendChild(item));
+            }
+
+            // 4. Initial Randomization for "All Works"
+            shuffleItems();
+
+            // Scroll Animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
+            
+            // Footer Year
+            const yearEl = document.getElementById('current-year');
+            if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Filtering
+            const buttons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update Button Styles
+                    buttons.forEach(b => {
+                        b.classList.remove('bg-brand-gold-500', 'text-brand-dark');
+                        b.classList.add('text-brand-gold-500');
+                    });
+                    btn.classList.remove('text-brand-gold-500');
+                    btn.classList.add('bg-brand-gold-500', 'text-brand-dark');
+                    
+                    const filter = btn.dataset.filter;
+                    
+                    // Logic: 
+                    // If "All Works" -> Shuffle for variety
+                    // If Specific Category -> Reset to Original Order to prevent gaps
+                    if (filter === 'all') {
+                        shuffleItems();
+                    } else {
+                        resetItemsOrder();
+                    }
+
+                    // Apply Filter Visibility
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.classList.remove('hidden-item');
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'scale(0.95)';
+                            setTimeout(() => item.classList.add('hidden-item'), 400);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
